@@ -1,93 +1,66 @@
-import { useState } from "react";
+
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import Navbar from "../Components/Navbar";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_PORT}/user/login`,
-        {
-          username: username,
-          password: password,
+    const [loginData, setLoginData] = useState({
+        username: '',
+        password: ''
+    });
+
+    const [statusMessage, setStatusMessage] = useState('');
+
+    const changeInputHandler = (e) => {
+        setLoginData({ ...loginData, [e.target.name]: e.target.value });
+        if (statusMessage) setStatusMessage('');
+    };
+
+    const submitHandler = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/login`, loginData);
+            console.log(response.data);
+
+            localStorage.setItem('token', response.data.token);
+
+            navigate('/admin');
+        } catch (error) {
+            if (error.response) {
+              setStatusMessage(error.response.data.msg);
+            } else if (error.request) {
+                console.log(error.request);
+            } else {
+                console.log('Error', error.message);
+            }
         }
-      );
+    };
 
-      if (response.status === 200) {
-        const userId = response.data.data.user_id;
-        localStorage.setItem("validation", "true");
-        localStorage.setItem("user_id", userId);
-        navigate(`/dashboard/${userId}`);
-      }
-    } catch (error) {
-      setErrorMessage(
-        error.response?.data?.message || "Login gagal, coba lagi."
-      );
-    }
-  };
 
   return (
-    <div>
-      <Navbar />
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="card w-full max-w-md shadow-lg bg-base-200">
-          <div className="card-body">
-            <h2 className="text-center text-2xl font-bold">Login</h2>
-            {errorMessage && (
-              <div className="alert alert-error">
-                <span>{errorMessage}</span>
-              </div>
-            )}
-            <form onSubmit={handleLogin}>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Username</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Masukkan username"
-                  className="input input-bordered"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-control mt-4">
-                <label className="label">
-                  <span className="label-text">Password</span>
-                </label>
-                <input
-                  type="password"
-                  placeholder="Masukkan password"
-                  className="input input-bordered"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-control mt-6">
-                <button type="submit" className="btn btn-primary">
-                  Login
-                </button>
-              </div>
-            </form>
-            <div>
-              <span>
-                Don&apos;t have an account? <a href="/register">Register</a>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+    <div className='flex flex-col items-center justify-center min-h-screen bg-base-100'>
+        <h2 className='text-2xl font-bold mb-10'>Log In</h2>
+        {statusMessage && <p className='text-red-500 text-xs italic mb-2'>{statusMessage}</p>}
 
-export default Login;
+        <form className='w-full max-w-xs' onSubmit={submitHandler}>
+            <input type="username" placeholder='Username' name="username" value={loginData.username} onChange={changeInputHandler}
+            className='shadow border rounded-md w-full py-2 px-3 text-gray-700'
+            />
+
+            <input type="password" placeholder='Password' name="password" value={loginData.password} onChange={changeInputHandler}
+            className='shadow border rounded-md w-full py-2 px-3 text-gray-700'
+            />
+
+            <button type='submit' className='bg-blue-500 hover:bg-blue-800 rounded-md py-2 px-4 w-full'>Log In</button>
+
+        </form>
+
+        <p className='mt-4'>No account yet?</p>
+        <Link to="/register" className='text-blue-500 hover:text-blue-800 text-xl'>Register</Link>
+    </div>
+  )
+}
+
+export default Login
