@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ReactPlayer from "react-player";
 import axios from "axios";
 import Loader from "./Loader";
 
 const VideoPlayer = () => {
   const [urlLive, setUrlLive] = useState("");
-
+  const [isPlaying, setIsPlaying] = useState(false);
+  const playerRef = useRef(null); 
+  
   useEffect(() => {
-    // Get video URL from backend
     axios
       .get(`${import.meta.env.VITE_BACKEND_PORT}/stream/`)
       .then((response) => {
@@ -19,10 +20,35 @@ const VideoPlayer = () => {
       });
   }, []);
 
+  const handlePlay = () => {
+    setIsPlaying(true);
+    playerRef.current?.play();
+  };
+
+  const handleStop = () => {
+    setIsPlaying(false);
+    playerRef.current?.seekTo(0);
+  };
+
   return (
     <div>
       {urlLive ? (
-        <ReactPlayer url={urlLive} controls={true} />
+        <div>
+          <ReactPlayer
+            ref={playerRef}
+            url={urlLive}
+            controls={true}
+            playing={isPlaying}
+          />
+          <div>
+            <button onClick={handlePlay} disabled={isPlaying}>
+              Play
+            </button>
+            <button onClick={handleStop} disabled={!isPlaying}>
+              Stop
+            </button>
+          </div>
+        </div>
       ) : (
         <Loader total={3} />
       )}

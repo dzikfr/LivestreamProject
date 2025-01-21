@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../config/db");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 const { apiDataSource } = require("../config/db");
 const { User } = require("../entities/user");
+
 //Get All Users
 router.get("/", async (req, res) => {
   try {
@@ -80,6 +82,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+//delete User
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
