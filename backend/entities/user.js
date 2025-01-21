@@ -17,9 +17,11 @@ const User = new EntitySchema({
     },
     streamlink: {
       type: "varchar",
+      default: "",
     },
     streamkey: {
       type: "varchar",
+      default: "",
     },
   },
 });
