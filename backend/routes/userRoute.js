@@ -127,12 +127,20 @@ router.post("/login", async (req, res) => {
     }
 
     // Match password
-    const match = await bcrypt.compare(password, user.password);
+    const match = bcrypt.compare(password, user.password);
     if (!match) {
       return res.status(401).json({ error: "Invalid username or password" });
     }
 
     delete user.password;
+
+    const loginlog = apiDataSource.getRepository(Log).create({
+      activity: "User Logged in",
+      detail: `user with username: ${username}, has logged in, id: ${result.id}`,
+      username: username,
+    });
+
+    await apiDataSource.getRepository(Log).save(registerlog);
 
     res.status(200).json({ data: user, message: "Login success" });
   } catch (error) {
@@ -166,7 +174,7 @@ router.post("/register", async (req, res) => {
     const result = await apiDataSource.getRepository(User).save(newUser);
     const registerlog = apiDataSource.getRepository(Log).create({
       activity: "New User Created",
-      detail: `user with username: ${username}, has create an account id: ${result.id}`,
+      detail: `user with username: ${username}, has create an account, id: ${result.id}`,
       username: username,
     });
 
