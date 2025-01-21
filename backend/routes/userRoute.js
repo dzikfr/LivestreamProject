@@ -31,15 +31,6 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const { username, password } = req.body;
-    const checkUser = await db.query(
-      "SELECT * FROM users WHERE username = $1",
-      [username]
-    );
-
-    if (checkUser.rows.length > 0) {
-      return res.status(400).json({ error: "Username already exists" });
-    }
-
     const result = await db.query(
       "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *",
       [username, password]
@@ -80,7 +71,7 @@ router.put("/:id", async (req, res) => {
       [username, password, id]
     );
 
-    res.status(200).json(result.rows[0]); 
+    res.status(200).json(result.rows[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -111,7 +102,31 @@ router.post("/login", async (req, res) => {
     }
 
     const user = result.rows[0];
-    res.status(200).json({data: user, message: "Login success", status : 200});
+    res.status(200).json({ data: user, message: "Login success", status: 200 });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.post("/register", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const checkUser = await db.query(
+      "SELECT * FROM users WHERE username = $1",
+      [username]
+    );
+
+    if (checkUser.rows.length > 0) {
+      return res.status(400).json({ error: "Username already exists" });
+    }
+
+    const result = await db.query(
+      "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *",
+      [username, password]
+    );
+
+    res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });

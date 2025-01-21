@@ -30,7 +30,7 @@ const Login = () => {
     <div className="flex items-center justify-center min-h-screen">
       <div className="card w-full max-w-md shadow-lg bg-base-200">
         <div className="card-body">
-          <h2 className="text-center text-2xl font-bold">Admin Login</h2>
+          <h2 className="text-center text-2xl font-bold">Login</h2>
           {errorMessage && (
             <div className="alert alert-error">
               <span>{errorMessage}</span>
@@ -69,6 +69,7 @@ const Login = () => {
               </button>
             </div>
           </form>
+          <div><span>Dont have account? <a href="/register">Register</a></span></div>
         </div>
       </div>
     </div>
