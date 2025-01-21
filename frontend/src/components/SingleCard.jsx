@@ -1,6 +1,6 @@
 import { useCart } from '../context/CartContext';
 
-const ProductSingleCard = ({ product }) => {
+const SingleCard = ({ product }) => {
 
   const { addToCart, removeFromCart, cartItems } = useCart();
 
@@ -47,4 +47,4 @@ const ProductSingleCard = ({ product }) => {
   );
 };
 
-export default ProductSingleCard
+export default SingleCard

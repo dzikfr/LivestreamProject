@@ -23,8 +23,8 @@ const Footer = () => {
   return (
 <footer className="footer p-10 bg-base-200 text-base-content">
   <aside>
-    <h2 className='text-3xl'>codeteria</h2>
-    <p>Providing reliable tech since 2024</p>
+    <h2 className='text-3xl'>liveteria</h2>
+    <p>Platform Streaming</p>
   </aside> 
   <nav>
     <h6 className="footer-title">Social</h6> 
