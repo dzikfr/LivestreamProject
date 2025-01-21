@@ -4,6 +4,10 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const { apiDataSource } = require("../config/db");
 const { User } = require("../entities/user");
+const dotenv = require("dotenv");
+const path = require("path");
+
+dotenv.config({ path: path.join(__dirname, "../.env") });
 
 //Get All Users
 router.get("/", async (req, res) => {
@@ -154,6 +158,8 @@ router.post("/register", async (req, res) => {
     const newUser = apiDataSource.getRepository(User).create({
       username: username,
       password: hashedPassword,
+      streamkey: `${username}?secret=${process.env.ORYX_STREAMKEY}`,
+      streamlink: `rtmp://localhost/live/${username}`,
     });
 
     const result = await apiDataSource.getRepository(User).save(newUser);

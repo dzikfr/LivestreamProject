@@ -15,7 +15,14 @@ const User = new EntitySchema({
     password: {
       type: "varchar",
     },
-    // Add other columns as needed
+    streamlink: {
+      type: "varchar",
+      default: "",
+    },
+    streamkey: {
+      type: "varchar",
+      default: "",
+    },
   },
 });
 
