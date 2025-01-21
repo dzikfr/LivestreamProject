@@ -6,6 +6,7 @@ const { apiDataSource } = require("../config/db");
 const { User } = require("../entities/user");
 const dotenv = require("dotenv");
 const path = require("path");
+const { Log } = require("../entities/log");
 
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
@@ -163,7 +164,13 @@ router.post("/register", async (req, res) => {
     });
 
     const result = await apiDataSource.getRepository(User).save(newUser);
+    const registerlog = apiDataSource.getRepository(Log).create({
+      activity: "New User Created",
+      detail: `user with username: ${username}, has create an account id: ${result.id}`,
+      username: username,
+    });
 
+    await apiDataSource.getRepository(Log).save(registerlog);
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
