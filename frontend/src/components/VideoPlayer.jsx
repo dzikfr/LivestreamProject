@@ -9,9 +9,9 @@ const VideoPlayer = () => {
   useEffect(() => {
     // Get video URL from backend
     axios
-      .get(`${import.meta.env.VITE_BACKEND_PORT}/video`)
+      .get(`${import.meta.env.VITE_BACKEND_PORT}/stream/`)
       .then((response) => {
-        setUrlLive(response.data.url);
+        setUrlLive(response.data.streams[0].streamUrl);
         console.log(response.data);
       })
       .catch((error) => {

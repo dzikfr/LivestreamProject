@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../Components/Navbar";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -28,6 +29,7 @@ const Register = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
+      <Navbar/>
       <div className="card w-full max-w-md shadow-lg bg-base-200">
         <div className="card-body">
           <h2 className="text-center text-2xl font-bold">Register</h2>
