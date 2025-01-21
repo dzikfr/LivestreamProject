@@ -102,11 +102,15 @@ router.post("/login", async (req, res) => {
     const result = await apiDataSource.getRepository(User).findOne({
       where: {
         username: username,
-        password: password,
       },
     });
 
     if (!result) {
+      return res.status(401).json({ error: "Invalid username or password" });
+    }
+
+    const match = bcrypt.compare(password, user.password);
+    if (!match) {
       return res.status(401).json({ error: "Invalid username or password" });
     }
 
@@ -131,9 +135,11 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ error: "Username already exists" });
     }
 
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const newUser = apiDataSource.getRepository(User).create({
       username: username,
-      password: password,
+      password: hashedPassword,
     });
 
     const result = await apiDataSource.getRepository(User).save(newUser);
