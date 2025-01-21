@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 //Get All Users
 router.get("/", async (req, res) => {
@@ -78,6 +80,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+//delete User
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -89,26 +92,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const result = await db.query(
-      "SELECT * FROM users WHERE username = $1 AND password = $2",
-      [username, password]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(401).json({ error: "Invalid username or password" });
-    }
-
-    const user = result.rows[0];
-    res.status(200).json({ data: user, message: "Login success", status: 200 });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
+//Register route
 router.post("/register", async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -121,12 +105,41 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ error: "Username already exists" });
     }
 
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const result = await db.query(
       "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *",
-      [username, password]
+      [username, hashedPassword]
     );
 
     res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//Login route
+router.post("/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const result = await db.query("SELECT * FROM users WHERE username = $1", [
+      username,
+    ]);
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: "Invalid username or password" });
+    }
+
+    const user = result.rows[0];
+
+    const match = await bcrypt.compare(password, user.password);
+
+    if (!match) {
+      return res.status(401).json({ error: "Invalid username or password" });
+    }
+
+    res.status(200).json({ data: user, message: "Login success", status: 200 });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });

@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
-import Navbar from "../Components/Navbar";
 
 const Home = () => {
   return (
     <div>
-      <Navbar/>
       <div className="hero bg-base-200 min-h-screen">
         <div className="hero-content text-center">
           <div className="max-w-md">
