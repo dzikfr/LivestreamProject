@@ -12,6 +12,9 @@ const Video = new EntitySchema({
     viewcount: {
       type: "int",
     },
+    playbacklink: {
+      type: "varchar",
+    },
     created_date: {
       type: "timestamp",
       createDate: true,
