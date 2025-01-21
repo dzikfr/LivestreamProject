@@ -4,6 +4,8 @@ import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import ProtectedRoute from "./Context/ProtectedRoute";
 import Dashboard from "./Pages/Dashboard";
+import Stream from "./pages/Stream";
+import View from "./pages/View";
 
 function App() {
   return (
@@ -15,6 +17,22 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stream/:id"
+          element={
+            <ProtectedRoute>
+              <Stream/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/view/:id"
+          element={
+            <ProtectedRoute>
+              <View/>
             </ProtectedRoute>
           }
         />

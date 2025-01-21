@@ -53,6 +53,7 @@ router.put("/:id", async (req, res) => {
     const { id } = req.params;
     const { username, password } = req.body;
 
+    //check if user exist
     const userExist = await apiDataSource.getRepository(User).findOne({
       where: { id: id },
     });
@@ -61,21 +62,31 @@ router.put("/:id", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const oldPassword = userExist.password;
-
-    if (oldPassword === password) {
+    if (password && (await bcrypt.compare(password, userExist.password))) {
       return res
         .status(400)
         .json({ error: "New password cannot be the same as the old password" });
     }
 
-    const updatedUser = apiDataSource.getRepository(User).create({
-      username: username,
-      password: password,
+    // Enkcrypt
+    let newPassword = userExist.password;
+    if (password) {
+      newPassword = await bcrypt.hash(password, 10);
+    }
+
+    // Update user
+    const updatedUser = apiDataSource.getRepository(User).merge(userExist, {
+      username: username || userExist.username, // Tetap gunakan username lama jika tidak ada perubahan
+      password: newPassword, // Gunakan password terenkripsi
     });
 
     const result = await apiDataSource.getRepository(User).save(updatedUser);
-    res.status(200).json(result);
+
+    delete result.password;
+
+    res
+      .status(200)
+      .json({ data: result, message: "User updated successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -99,23 +110,26 @@ router.delete("/:id", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
-    const result = await apiDataSource.getRepository(User).findOne({
+
+    const user = await apiDataSource.getRepository(User).findOne({
       where: {
         username: username,
       },
     });
 
-    if (!result) {
+    if (!user) {
       return res.status(401).json({ error: "Invalid username or password" });
     }
 
-    const match = bcrypt.compare(password, user.password);
+    // Match password
+    const match = await bcrypt.compare(password, user.password);
     if (!match) {
       return res.status(401).json({ error: "Invalid username or password" });
     }
 
-    const user = result;
-    res.status(200).json({ data: user, message: "Login success", status: 200 });
+    delete user.password;
+
+    res.status(200).json({ data: user, message: "Login success" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });

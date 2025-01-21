@@ -14,8 +14,9 @@ const Dashboard = () => {
       <div className="flex w-full flex-col">
         <div className="card bg-base-300 rounded-box grid h-auto place-items-center">
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl">
-            Start Your Streaming
+            Select
           </h2>
+          <button to={`/stream/${id}`} className="btn hover:bg-black" onClick={() => console.log(id)}>adasd</button>
           <div className="w-full max-w-4xl h-0 pb-[56.25%] relative">
             <VideoPlayer />
           </div>
