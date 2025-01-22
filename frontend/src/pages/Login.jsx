@@ -20,14 +20,17 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      // Kirim request ke backend
       const response = await axios.post(
         `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/auth/login`,
         loginData
       );
       console.log(response.data);
+      const userId = response.data.data.id;
+
       localStorage.setItem("token", response.data.data.token);
-      navigate("/admin");
+      localStorage.setItem("userId", userId);
+      
+      navigate(`/user/${userId}`);
     } catch (error) {
       if (error.response) {
         setStatusMessage(
