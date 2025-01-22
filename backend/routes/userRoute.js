@@ -7,6 +7,8 @@ const { User } = require("../entities/user");
 const dotenv = require("dotenv");
 const path = require("path");
 const { Log } = require("../entities/log");
+const { Streamkey } = require("../entities/streamkey");
+const { Stream } = require("stream");
 
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
@@ -167,7 +169,6 @@ router.post("/register", async (req, res) => {
     const newUser = apiDataSource.getRepository(User).create({
       username: username,
       password: hashedPassword,
-      streamkey: `${username}?secret=${process.env.ORYX_STREAMKEY}`,
       streamlink: `rtmp://localhost/live/${username}`,
     });
 
@@ -198,6 +199,26 @@ router.get("/username/:username", async (req, res) => {
     }
 
     res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("key/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await apiDataSource.getRepository(Streamkey).findOne({
+      where: { userId: null },
+    });
+
+    if (!result) {
+      return res.status(404).json({ message: "No streamkey available!" });
+    }
+
+    result.userId = id;
+    await apiDataSource.getRepository(Streamkey).save(result);
+    res.json(result.key);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });

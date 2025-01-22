@@ -1,0 +1,36 @@
+{
+  "code": 0,
+  "server": "vid-q9545m8",
+  "service": "h887p89w",
+  "pid": "41",
+  "streams": [
+    {
+      "id": "vid-5912013",
+      "name": "37a8c747fcd2",
+      "vhost": "vid-r05582h",
+      "app": "live/test",
+      "tcUrl": "rtmp://localhost/live/test",
+      "url": "/live/test/37a8c747fcd2",
+      "live_ms": 1737509910662,
+      "clients": 2,
+      "frames": 32091,
+      "send_bytes": 8918,
+      "recv_bytes": 352209241,
+      "kbps": { "recv_30s": 14, "send_30s": 1 },
+      "publish": { "active": true, "cid": "qf24pq9c" },
+      "video": {
+        "codec": "H264",
+        "profile": "High",
+        "level": "Other",
+        "width": 1920,
+        "height": 1080
+      },
+      "audio": {
+        "codec": "AAC",
+        "sample_rate": 44100,
+        "channel": 2,
+        "profile": "LC"
+      }
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "code": 0,
+  "server": "vid-q9545m8",
+  "service": "h887p89w",
+  "pid": "41",
+  "clients": [
+    {
+      "id": "qf24pq9c",
+      "vhost": "vid-r05582h",
+      "stream": "vid-5912013",
+      "ip": "172.17.0.1",
+      "pageUrl": "",
+      "swfUrl": "rtmp://localhost/live/test",
+      "tcUrl": "rtmp://localhost/live/test",
+      "url": "/live/test/37a8c747fcd2",
+      "name": "37a8c747fcd2",
+      "type": "fmle-publish",
+      "publish": true,
+      "alive": 25.63,
+      "send_bytes": 4292,
+      "recv_bytes": 15528036,
+      "kbps": { "recv_30s": 0, "send_30s": 0 }
+    },
+    {
+      "id": "u629910r",
+      "vhost": "vid-r05582h",
+      "stream": "vid-5912013",
+      "ip": "172.17.0.1",
+      "pageUrl": "http://localhost:2022/tools/player.html?url=http://localhost:2022/live/test/37a8c747fcd2.m3u8",
+      "swfUrl": "",
+      "tcUrl": "http://localhost/live/test",
+      "url": "/live/test/37a8c747fcd2",
+      "name": "37a8c747fcd2.m3u8",
+      "type": "hls-play",
+      "publish": false,
+      "alive": 494.42,
+      "send_bytes": 0,
+      "recv_bytes": 0,
+      "kbps": { "recv_30s": 0, "send_30s": 0 }
+    }
+  ]
+}

@@ -22,8 +22,8 @@ router.get("/", async (req, res) => {
       const streamData = data.streams.map((stream) => ({
         streamId: stream.id,
         streamName: stream.name,
-        username: stream.name,
-        streamUrl: `${ORYX_EMBEDURL}${stream.url}.flv`,
+        username: stream.app.split("/")[1],
+        streamUrl: `${ORYX_EMBEDURL}${stream.url}.m3u8`,
         clients: stream.clients,
       }));
 
