@@ -1,103 +1,88 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    if (password === confirmPassword) {
-      try {
-        const response = await axios.post(
-          `${import.meta.env.VITE_BACKEND_PORT}/user/register`,
-          {
-            username: username,
-            password: password,
-          }
-        );
+    const [userData, setUserData] = useState({
+        username: '',
+        password: '',
+        password2: ''
+    });
 
-        if (response.status === 200)
-          navigate("/login");
-      } catch (error) {
-        setErrorMessage(
-          error.error || "Register gagal, coba lagi."
-        );
-      }
-    } else {
-      setErrorMessage("Password dan confirm password tidak sesuai.");
-    }
-  };
+    const [statusMessage, setStatusMessage] = useState('');
+    const [isSuccess, setIsSuccess] = useState(false);
+
+    const changeInputHandler = (e) => {
+        setUserData({ ...userData, [e.target.name]: e.target.value });
+        setStatusMessage('');
+        setIsSuccess(false);
+    };
+
+    const submitHandler = async (e) => {
+        e.preventDefault();
+
+        if (userData.password !== userData.password2) {
+            setIsSuccess(false);
+            setStatusMessage('Passwords do not match');
+            return;
+        }
+
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/register`, {
+                username: userData.username,
+                password: userData.password
+            }, config);
+
+            setIsSuccess(true);
+            setStatusMessage('Registration successful');
+            navigate('/login');
+        } catch (error) {
+            setIsSuccess(false);
+            setStatusMessage(error.response?.data?.msg || 'An error occurred');
+        }
+    };
+
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="card w-full max-w-md shadow-lg bg-base-200">
-        <div className="card-body">
-          <h2 className="text-center text-2xl font-bold">Register</h2>
-          {errorMessage && (
-            <div className="alert alert-error">
-              <span>{errorMessage}</span>
-            </div>
-          )}
-          <form onSubmit={handleRegister}>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Username</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Username"
-                className="input input-bordered"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            </div>
-            <div className="form-control mt-4">
-              <label className="label">
-                <span className="label-text">Password</span>
-              </label>
-              <input
-                type="password"
-                placeholder="Password"
-                className="input input-bordered"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <div className="form-control mt-4">
-              <label className="label">
-                <span className="label-text">Confirm Password</span>
-              </label>
-              <input
-                type="password"
-                placeholder="Confirm password"
-                className="input input-bordered"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-            </div>
-            <div className="form-control mt-6">
-              <button type="submit" className="btn btn-primary">
-                Register
-              </button>
-            </div>
-          </form>
-          <div>
-            <span>
-              Already have account? <a href="/login">Login</a>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+    <div className='flex flex-col items-center justify-center min-h-screen bg-test-100'>
+        <h2 className='text-2xl font-bold mb-4'>Register</h2>
 
-export default Register;
+        {statusMessage && (
+            <p className={`${isSuccess ? 'text-green-500' : 'text-red-500'} text-lg italic mb-4`}>
+                {statusMessage}
+            </p>
+        )}
+
+        <form className='w-full max-w-xs' onSubmit={submitHandler}>
+            <input type="text" placeholder='Username' name="username" value={userData.username} onChange={changeInputHandler} 
+            className='shadow border rounded-md w-full py-2 px-3 text-gray-700'
+            />
+            <input type="password" placeholder='Password' name="password" value={userData.password} onChange={changeInputHandler} 
+            className='shadow border rounded-md w-full py-2 px-3 text-gray-700'
+            />
+            <input type="password" placeholder='Confirm password' name="password2" value={userData.password2} onChange={changeInputHandler} 
+            className='shadow border rounded-md w-full py-2 px-3 text-gray-700'
+            />
+
+            <button type="submit" className='bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-md w-full'>
+                Register
+            </button>
+
+        </form>
+
+        <p className='mt-4'>Existing/Created Account?</p>
+        <Link to="/login" className='text-blue-500 hover:text-blue-800 text-xl'>Sign In</Link>
+
+    </div>
+  )
+}
+
+export default Register
