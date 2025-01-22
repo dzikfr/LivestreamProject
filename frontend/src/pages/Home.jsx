@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
 import ProductCard from '../components/Card';
+// import VideoPlayer from '../Components/VideoPlayer';
+import VideoList from '../components/VideoList';
 
 const Home = () => {
 
@@ -28,10 +30,8 @@ const latestProducts = product.slice(0, 9);
           </h1>
           <p className="py-6">
             Stream and Watch!
+            <VideoList/>
           </p>
-          <a href="/shop" className="btn btn-accent mt-4">
-              Start Now
-          </a>
         </div>
       </div>
       

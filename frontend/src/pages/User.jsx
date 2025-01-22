@@ -1,64 +1,91 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
-const User = () => {
-  const { id } = useParams();
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
+const Admin = () => {
+  const [product, setProduct] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
+
     axios
-      .get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/${id}`)
+      .get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/video`)
       .then((response) => {
-        setUserData(response.data.data);
+        setProduct(response.data.data);
         setLoading(false);
-        console.log(userData.streamlink, userData.streamkey);
       })
       .catch((error) => {
         console.error(error);
-        setLoading(false); // Tetap set loading ke false meski terjadi error
+        setLoading(false);
       });
-  }, [id, userData.streamlink, userData.streamkey]);
-
-  if (loading) {
-    return (
-      <p className="text-center text-lg font-medium">Loading user data...</p>
-    );
-  }
-
-  if (!userData) {
-    return (
-      <p className="text-center text-lg font-medium text-red-500">
-        User not found.
-      </p>
-    );
-  }
+  }, []);
 
   return (
-    <div className="px-4 py-8 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">User Profile</h1>
-      <div className="bg-base-200 p-4 rounded-lg shadow-md">
-        <p>
-          <strong>ID:</strong> {userData.id}
-        </p>
-        <p>
-          <strong>Username:</strong> {userData.username}
-        </p>
-        <p>
-          <strong>Stream Link:</strong>{" "}
-          {userData.streamlink || "No stream link provided"}
-        </p>
-        <p>
-          <strong>Stream Key:</strong>{" "}
-          {userData.streamkey || "No stream key provided"}
-        </p>
-        <p>
-          <strong>Token:</strong> <code>{userData.token}</code>
-        </p>
+    <div className="px-4 py-8 max-w-7xl mx-auto">
+
+      <div className="overflow-x-auto">
+        {loading ? (
+          <div className="text-center py-10">
+            <p className="text-lg font-medium">Loading...</p>
+          </div>
+        ) : (
+          <table className="table">
+            <thead>
+              <tr>
+                <th>
+                  <Link
+                    to="/stream"
+                    className="bg-green-600 hover:bg-green-900 py-2 px-4 font-medium rounded-lg 
+                                shadow-md text-base-100"
+                  >
+                    Start Stream
+                  </Link>
+                </th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              {product.map((product) => (
+                <tr key={product._id} className="bg-base-100 hover:bg-base-300">
+                  <td>
+                    <div className="avatar">
+                      <div className="mask mask-squircle w-12 h-12">
+                        <img src={product.image} alt={product.title} />
+                      </div>
+                    </div>
+                  </td>
+                  <td className="py-3 px-5">{product.name}</td>
+                  <td className="py-3 px-5">{product.price}</td>
+                  <td className="py-3 px-5">{product.description}</td>
+                  <td className="py-3 px-5">{product.category}</td>
+                  <td className="py-3 px-5">
+                    <div className="flex justify-center gap-x-1">
+                      <Link
+                        to={`/admin/product/edit/${product._id}`}
+                        className="bg-orange-500 hover:bg-orange-900 text-white py-2 px-4 font-medium rounded-l-lg text-sm"
+                      >
+                        Edit
+                      </Link>
+                      <Link
+                        to={`/admin/product/delete/${product._id}`}
+                        className="bg-red-500 hover:bg-red-900 text-white py-2 px-4 font-medium rounded-r-lg text-sm"
+                      >
+                        Delete
+                      </Link>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );
 };
 
-export default User;
+export default Admin;

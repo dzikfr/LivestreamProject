@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import ReactPlayer from "react-player";
+import {Link} from "react-router-dom";
 
 const VideoList = () => {
   const [videos, setVideos] = useState([]);
@@ -25,7 +26,8 @@ const VideoList = () => {
       {videos.map((video) => (
         <div key={video.streamId}>
           <h2>{video.streamName}</h2>
-          <p>Clients: {video.clients}</p>
+          <p>username: {video.username}</p>
+          <Link to={video.streamUrl}></Link>
           <ReactPlayer
             ref={playerRef}
             url={video.streamUrl}

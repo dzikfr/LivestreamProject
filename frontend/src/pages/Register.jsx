@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { enqueueSnackbar } from "notistack";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -47,6 +48,7 @@ const Register = () => {
 
       setIsSuccess(true);
       setStatusMessage("Registration successful");
+      enqueueSnackbar("Registration successful", { variant: "success" });
       navigate("/login");
     } catch (error) {
       setIsSuccess(false);
@@ -102,10 +104,18 @@ const Register = () => {
         </button>
       </form>
 
-      <p className="mt-4">Existing/Created Account?</p>
-      <Link to="/login" className="text-blue-500 hover:text-blue-800 text-xl">
-        Sign In
-      </Link>
+      <p className="mt-4">
+        Don&apos;t Have Account?{" "}
+        <span>
+          {" "}
+          <Link
+            to="/login"
+            className="text-blue-500 hover:text-blue-800 text-xl"
+          >
+            sign in
+          </Link>
+        </span>
+      </p>
     </div>
   );
 };
