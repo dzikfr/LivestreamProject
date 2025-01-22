@@ -3,6 +3,7 @@ const app = express();
 const PORT = 3000;
 const userRoute = require("./routes/userRoute");
 const streamRoute = require("./routes/streamRoute");
+const authRoute = require("./routes/authRoute");
 const cors = require("cors");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
@@ -28,6 +29,7 @@ async function intializeAPI() {
     app.use(express.json());
     app.use("/user", userRoute);
     app.use("/stream", streamRoute);
+    app.use("/auth", authRoute);
 
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
