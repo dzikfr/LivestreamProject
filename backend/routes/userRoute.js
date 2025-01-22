@@ -225,4 +225,24 @@ router.get("key/:id", async (req, res) => {
   }
 });
 
+router.delete("key/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await apiDataSource.getRepository(Streamkey).findOne({
+      where: { userId: id },
+    });
+
+    if (!result) {
+      return res.status(404).json({ message: "No streamkey reserved!" });
+    }
+
+    result.userId = null;
+    await apiDataSource.getRepository(Streamkey).save(result);
+    res.status(200).json({ message: "Key unreserved" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 module.exports = router;

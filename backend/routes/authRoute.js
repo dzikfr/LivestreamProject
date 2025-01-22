@@ -36,7 +36,7 @@ router.post("/login", async (req, res) => {
       JWT_SECRET,
       {
         expiresIn: "1h", // Token valid for 1 hour
-      }
+      },
     );
 
     // Log user login
@@ -77,7 +77,6 @@ router.post("/register", async (req, res) => {
     const newUser = apiDataSource.getRepository(User).create({
       username: username,
       password: hashedPassword,
-      streamkey: `${username}?secret=${process.env.ORYX_STREAMKEY}`,
       streamlink: `rtmp://localhost/live/${username}`,
     });
 
