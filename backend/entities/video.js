@@ -9,6 +9,9 @@ const Video = new EntitySchema({
       type: "int",
       generated: true,
     },
+    video_name: {
+      type: "varchar",
+    },
     viewcount: {
       type: "int",
     },
