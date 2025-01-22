@@ -14,6 +14,7 @@ import Footer from "./components/Footer";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import AdminNavbar from "./components/AdminNavbar";
+import User from "./pages/User";
 
 function App() {
   const location = useLocation();
@@ -31,6 +32,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/success" element={<Success />} />
         <Route path="/cancel" element={<Cancel />} />
+        <Route path="/user:id" element={<User />} />
         <Route
           path="/admin/*"
           element={

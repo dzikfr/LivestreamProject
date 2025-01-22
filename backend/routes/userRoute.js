@@ -104,16 +104,42 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await apiDataSource.getRepository(User).delete({
-      id: id,
+    const numericId = parseInt(id, 10);
+
+    if (isNaN(numericId)) {
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
+
+    await apiDataSource.getRepository(Streamkey).delete({
+      userId: numericId,
     });
-    res.json(result.rows).status(200);
+
+    const result = await apiDataSource.getRepository(User).delete({
+      id: numericId,
+    });
+
+    if (result.affected === 0) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
+    const loginlog = apiDataSource.getRepository(Log).create({
+      activity: "Delete user",
+      detail: `User with id: ${id} has been deleted by dev.`,
+      username: "dev",
+    });
+
+    await apiDataSource.getRepository(Log).save(loginlog);
+
+    res.status(200).json({
+      message: `User with ID ${numericId} has been deleted successfully.`,
+    });
   } catch (error) {
-    console.error(error);
+    console.error("Error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
+//login
 router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -205,7 +231,7 @@ router.get("/username/:username", async (req, res) => {
   }
 });
 
-router.get("key/:id", async (req, res) => {
+router.get("/key/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await apiDataSource.getRepository(Streamkey).findOne({
@@ -225,7 +251,7 @@ router.get("key/:id", async (req, res) => {
   }
 });
 
-router.delete("key/:id", async (req, res) => {
+router.delete("/key/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await apiDataSource.getRepository(Streamkey).findOne({
