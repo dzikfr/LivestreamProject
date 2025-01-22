@@ -9,10 +9,10 @@ const cors = require("cors");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const { apiDataSource } = require("./config/db");
-const { Video } = require("./entities/video");
-const { User } = require("./entities/user");
-const Docker = require("dockerode");
-const docker = new Docker();
+// const { Video } = require("./entities/video");
+// const { User } = require("./entities/user");
+// const Docker = require("dockerode");
+// const docker = new Docker();
 
 async function intializeAPI() {
   try {
@@ -60,12 +60,26 @@ async function intializeAPI() {
 //       since: Math.floor(Date.now() / 1000),
 //       tail: 0,
 //     });
+// async function monitorDockerLogs() {
+//   try {
+//     await apiDataSource.initialize();
+//     const container = docker.getContainer(
+//       "bc07cb697fd6a09b97de134bd2c1dfc25234311f0b4e3f90b501a75c069b0da7",
+//     );
+//     const logStream = await container.logs({
+//       follow: true,
+//       stdout: true,
+//       stderr: true,
+//       timestamps: true,
+//       since: Math.floor(Date.now() / 1000),
+//       tail: 0,
+//     });
 
 //     logStream.on("data", async (data) => {
 //       const logLine = data.toString("utf8");
 
-//       // Check for record ID in "Record: Got message" logs
-//       if (logLine.includes("Record: Got message")) {
+//       // Check for record ID in "Record is done" logs
+//       if (logLine.includes("Record is done")) {
 //         const urlMatch = logLine.match(/url=([^,]+)/);
 //         const uuidMatch = logLine.match(/uuid=([^,]+)/);
 
@@ -102,4 +116,4 @@ async function intializeAPI() {
 // }
 
 intializeAPI();
-// monitorDockerLogs();
+//monitorDockerLogs();
