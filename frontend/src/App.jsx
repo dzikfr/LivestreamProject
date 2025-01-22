@@ -15,6 +15,8 @@ import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import AdminNavbar from "./components/AdminNavbar";
 import User from "./pages/User";
+import Test from "./pages/Test";
+import View from "./pages/View";
 
 function App() {
   const location = useLocation();
@@ -27,12 +29,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="view" element={<View />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/success" element={<Success />} />
         <Route path="/cancel" element={<Cancel />} />
-        <Route path="/user:id" element={<User />} />
+        <Route path="/user" element={<User />} />
+        <Route path="/test" element={<Test/>} />
         <Route
           path="/admin/*"
           element={

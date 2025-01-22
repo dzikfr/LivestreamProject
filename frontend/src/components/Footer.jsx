@@ -36,7 +36,7 @@ const Footer = () => {
   </nav>
   <nav>
     <h6 className="footer-title">Support</h6> 
-    <a className="link link-hover">codeteria@test.com</a>
+    <a className="link link-hover">liveteria@test.com</a>
     <a className="link link-hover">+99 999 99</a>
   </nav> 
   <form onSubmit={handleSubscribe}>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { enqueueSnackbar } from "notistack";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -29,20 +30,16 @@ const Login = () => {
 
       localStorage.setItem("token", response.data.data.token);
       localStorage.setItem("userId", userId);
-      
+
       navigate(`/user/${userId}`);
-    } catch (error) {
-      if (error.response) {
-        setStatusMessage(
-          error.response.data.error || "Login failed, please try again."
-        );
-      } else if (error.request) {
-        setStatusMessage("No response from server. Please try again later.");
-        console.error(error.request);
-      } else {
-        setStatusMessage("An error occurred. Please try again.");
-        console.error("Error:", error.message);
+      
+      if (response.status === 200) {
+        enqueueSnackbar(response.data.message || "Login successful", { variant: "success" });
       }
+    } catch (error) {
+        console.error(error);
+        setStatusMessage(error.response?.data?.error || "An error occurred");
+        enqueueSnackbar(error.response?.data?.error || "An error occurred", { variant: "error" });
     }
   };
 
@@ -80,13 +77,18 @@ const Login = () => {
         </button>
       </form>
 
-      <p className="mt-4">No account yet?</p>
-      <Link
-        to="/register"
-        className="text-blue-500 hover:text-blue-800 text-xl"
-      >
-        Register
-      </Link>
+      <p className="mt-4">
+        No account yet?
+        <span>
+          {" "}
+          <Link
+            to="/register"
+            className="text-blue-500 hover:text-blue-800 text-xl"
+          >
+            register
+          </Link>
+        </span>
+      </p>
     </div>
   );
 };
