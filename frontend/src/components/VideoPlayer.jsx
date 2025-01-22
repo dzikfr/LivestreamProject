@@ -6,14 +6,19 @@ import Loader from "./Loader";
 const VideoPlayer = () => {
   const [urlLive, setUrlLive] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
-  const playerRef = useRef(null); 
-  
+  const playerRef = useRef(null);
+
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_BACKEND_PORT}/stream/`)
       .then((response) => {
-        setUrlLive(response.data.streams[0].streamUrl);
-        console.log(response.data);
+        
+        if (response.data.streams && response.data.streams.length > 0) {
+          setUrlLive(response.data.streams[0].streamUrl);
+          console.log(response.data);
+        } else {
+          console.error("Tidak ada stream tersedia.");
+        }
       })
       .catch((error) => {
         console.error("Gagal memuat URL video:", error);

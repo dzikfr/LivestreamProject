@@ -12,19 +12,12 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route
-          path="/dashboard/:id"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/dashboard/:id" element={<Dashboard />} />
         <Route
           path="/stream/:id"
           element={
             <ProtectedRoute>
-              <Stream/>
+              <Stream />
             </ProtectedRoute>
           }
         />
@@ -32,7 +25,7 @@ function App() {
           path="/view/:id"
           element={
             <ProtectedRoute>
-              <View/>
+              <View />
             </ProtectedRoute>
           }
         />

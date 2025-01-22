@@ -1,4 +1,4 @@
-import VideoPlayer from "../Components/VideoPlayer"
+import VideoPlayer from "../components/VideoPlayer"
 
 const Stream = () => {
   return (

@@ -127,7 +127,7 @@ router.post("/login", async (req, res) => {
     }
 
     // Match password
-    const match = bcrypt.compare(password, user.password);
+    const match = await bcrypt.compare(password, user.password); // Tambahkan await
     if (!match) {
       return res.status(401).json({ error: "Invalid username or password" });
     }
@@ -136,11 +136,11 @@ router.post("/login", async (req, res) => {
 
     const loginlog = apiDataSource.getRepository(Log).create({
       activity: "User Logged in",
-      detail: `user with username: ${username}, has logged in, id: ${result.id}`,
+      detail: `user with username: ${username}, has logged in, id: ${user.id}`, // Perbaiki detail
       username: username,
     });
 
-    await apiDataSource.getRepository(Log).save(registerlog);
+    await apiDataSource.getRepository(Log).save(loginlog); // Perbaiki nama variabel
 
     res.status(200).json({ data: user, message: "Login success" });
   } catch (error) {

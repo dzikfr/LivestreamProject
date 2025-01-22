@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer srs-v2-76770cd1996f4846b2986cea8de6539b",
+        Authorization: "Bearer srs-v2-7ff6f3ad25bb4808a032d36dd4e81683",
       },
       body: JSON.stringify({
         key: "value",
