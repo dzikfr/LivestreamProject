@@ -65,7 +65,7 @@ async function monitorDockerLogs() {
       const logLine = data.toString("utf8");
 
       // Check for record ID in "Record: Got message" logs
-      if (logLine.includes("Record: Got message")) {
+      if (logLine.includes("Record is done")) {
         const urlMatch = logLine.match(/url=([^,]+)/);
         const uuidMatch = logLine.match(/uuid=([^,]+)/);
 
