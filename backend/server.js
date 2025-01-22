@@ -3,6 +3,7 @@ const app = express();
 const PORT = 3000;
 const userRoute = require("./routes/userRoute");
 const streamRoute = require("./routes/streamRoute");
+const videoRoute = require("./routes/videoRoute");
 const authRoute = require("./routes/authRoute");
 const cors = require("cors");
 const morgan = require("morgan");
@@ -29,6 +30,7 @@ async function intializeAPI() {
     app.use(express.json());
     app.use("/user", userRoute);
     app.use("/stream", streamRoute);
+    app.use("/dvr", videoRoute);
     app.use("/auth", authRoute);
 
     app.listen(PORT, () => {

@@ -3,6 +3,7 @@ const { User } = require("../entities/user");
 const dotenv = require("dotenv");
 const path = require("path"); // Add this line since you're using path
 const { Log } = require("../entities/log");
+const { Streamkey } = require("../entities/streamkey");
 
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
@@ -15,7 +16,7 @@ const apiDataSource = new DataSource({
   database: process.env.SUPABASE_DBNAME,
   synchronize: true,
   logging: true,
-  entities: [User, Log],
+  entities: [User, Log, Streamkey],
   ssl: {
     rejectUnauthorized: false,
   },
