@@ -22,4 +22,41 @@ router.post("/view/:id", async (req, res) => {
   res.sendStatus(200);
 });
 
+//get all video
+router.get("/", async (req, res) => {
+  try {
+    const result = await apiDataSource.getRepository(Video).find();
+
+    if (!result || result.length === 0) {
+      return res.status(404).json({ message: "No Videos found" });
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching videos", error: error.message });
+  }
+});
+
+//get all user video
+router.get("/user/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await apiDataSource.getRepository(Video).find({
+      where: { userId: id },
+    });
+
+    if (!result || result.length === 0) {
+      return res.status(404).json({ message: "No Videos found" });
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching videos", error: error.message });
+  }
+});
+
 module.exports = router;
