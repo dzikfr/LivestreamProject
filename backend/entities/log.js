@@ -9,9 +9,6 @@ const Log = new EntitySchema({
       type: "int",
       generated: true,
     },
-    username: {
-      type: "varchar",
-    },
     activity: {
       type: "varchar",
     },

@@ -121,13 +121,12 @@ router.delete("/:id", async (req, res) => {
       return res.status(404).json({ message: "User not found!" });
     }
 
-    const loginlog = apiDataSource.getRepository(Log).create({
+    const deletelog = apiDataSource.getRepository(Log).create({
       activity: "Delete user",
-      detail: `User with id: ${id} has been deleted by dev.`,
-      username: "dev",
+      detail: `User with id: ${id} has been deleted by system.`,
     });
 
-    await apiDataSource.getRepository(Log).save(loginlog);
+    await apiDataSource.getRepository(Log).save(deletelog);
 
     res.status(200).json({
       message: `User with ID ${numericId} has been deleted successfully.`,
@@ -164,10 +163,9 @@ router.post("/login", async (req, res) => {
     const loginlog = apiDataSource.getRepository(Log).create({
       activity: "User Logged in",
       detail: `user with username: ${username}, has logged in, id: ${result.id}`,
-      username: username,
     });
 
-    await apiDataSource.getRepository(Log).save(registerlog);
+    await apiDataSource.getRepository(Log).save(loginlog);
 
     res.status(200).json({ data: user, message: "Login success" });
   } catch (error) {
@@ -201,7 +199,6 @@ router.post("/register", async (req, res) => {
     const registerlog = apiDataSource.getRepository(Log).create({
       activity: "New User Created",
       detail: `user with username: ${username}, has create an account, id: ${result.id}`,
-      username: username,
     });
 
     await apiDataSource.getRepository(Log).save(registerlog);
