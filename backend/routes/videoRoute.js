@@ -106,7 +106,7 @@ router.post("/view/:id", async (req, res) => {
   
   result.viewcount++;
   apiDataSource.getRepository(Video).save(result);
-  await videoRepository.save(viewlog);
+  await apiDataSource.getRepository(Log).save(viewlog);
   res.sendStatus(200);
 });
 
