@@ -5,6 +5,7 @@ const ORYX_APIURL = "http://localhost:2022/api/v1";
 const ORYX_EMBEDURL = "http://localhost:2022";
 const { apiDataSource } = require("../config/db");
 const { User } = require("../entities/user");
+const { Streamkey } = require("../entities/streamkey");
 
 //Get All Stream from oryx
 router.get("/", async (req, res) => {
@@ -56,7 +57,28 @@ router.get("/", async (req, res) => {
 //Get user streamlink
 router.get("/:id", async (req, res) => {
   try {
-  } catch (error) {}
+    const { id } = req.params;
+
+    const streamkeyRepo = apiDataSource.getRepository(Streamkey);
+    const streamkey = await streamkeyRepo.findOne({
+      where: { userId : id },
+      relations: ["user"], 
+    });
+
+    if (!streamkey) {
+      return res.status(404).json({ message: "Streamkey not found" });
+    }
+
+    const keyWithoutSecret = streamkey.key.split("?")[0];
+
+    res.json({
+      link: `http://localhost:2022/live/${keyWithoutSecret}.m3u8`,
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
+
 
 module.exports = router;
