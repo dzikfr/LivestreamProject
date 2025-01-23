@@ -10,7 +10,7 @@ const VideoPlayer = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BACKEND_PORT}/strseam`)
+      .get(`${import.meta.env.VITE_BACKEND_PORT}/stream`)
       .then((response) => {
         
         if (response.data.streams && response.data.streams.length > 0) {

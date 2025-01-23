@@ -8,10 +8,10 @@ const View = () => {
   const [linkVideo, setLinkVideo] = useState("");
 
   useEffect(() => {
-    console.log("ID dari URL:", id); // Debug ID
+    console.log("ID dari URL:", id);
     if (id) {
       axios
-        .get(`http://localhost:3000/stream/${id}`)
+        .get(`${import.meta.env.VITE_BACKEND_PORT}/stream/${id}`)
         .then((response) => {
           console.log("Respons dari API:", response.data);
           setLinkVideo(response.data.streamUrl);
@@ -26,7 +26,7 @@ const View = () => {
     <div>
       {linkVideo ? (
         <ReactPlayer
-          url={"http://localhost:3000/uploads/videos/1737613014849-598059978.mp4"}
+          url={linkVideo}
           controls
           width="100%"
           height="100%"
