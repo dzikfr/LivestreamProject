@@ -6,7 +6,7 @@ const ORYX_EMBEDURL = "http://localhost:2022";
 const { apiDataSource } = require("../config/db");
 const { User } = require("../entities/user");
 const { Streamkey } = require("../entities/streamkey");
-const { Streamkey } = require("../entities/streamkey");
+// const { Streamkey } = require("../entities/streamkey");
 
 //Get All Stream from oryx
 router.get("/", async (req, res) => {
@@ -68,7 +68,7 @@ router.get("/:id", async (req, res) => {
         where: { id: id },
       });
       res.status(200).json({
-        streamUrl: `${ORYX_EMBEDURL}/live/${result.username}/${validation.key.split("?")[0]}.m3u8`,
+        streamUrl: `${ORYX_EMBEDURL}/live/${validation.key.split("?")[0]}.m3u8`,
       });
     }
     return res
