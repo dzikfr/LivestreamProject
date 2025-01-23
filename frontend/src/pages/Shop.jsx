@@ -38,7 +38,7 @@ const Shop = () => {
 
   useEffect(() => {
     filterProducts();
-  }, [product, category]);
+  }, []);
 
 
   return (

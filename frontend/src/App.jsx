@@ -1,9 +1,5 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoutes";
-import Admin from "./pages/Admin";
-import EditProduct from "./pages/EditProduct";
-import DeleteProduct from "./pages/DeleteProduct";
-import CreateProduct from "./pages/CreateProduct";
 import Home from "./Pages/Home";
 import Navbar from "./components/Navbar";
 import Shop from "./pages/Shop";

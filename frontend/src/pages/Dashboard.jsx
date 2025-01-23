@@ -1,5 +1,5 @@
 import Navbar from "../components/Navbar";
-import VideoPlayer from "../Components/VideoPlayer";
+import VideoPlayer from "../components/VideoPlayer";
 import VideoList from "../components/VideoList";
 import { useParams } from "react-router-dom";
 
