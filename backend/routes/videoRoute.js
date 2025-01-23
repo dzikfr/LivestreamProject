@@ -63,7 +63,13 @@ router.post("/upload/:id", upload.single("video"), async (req, res) => {
       userId: id,
     });
 
+    const uploadlog = apiDataSource.getRepository(Log).create({
+      activity: "Upload Video",
+      detail: `User with id: ${id} uploaded a new video with the title: ${req.file.originalname}.`,
+    });
+
     await videoRepository.save(newVideo);
+    await apiDataSource.getRepository(Log).save(uploadlog);
 
     res.status(201).json({
       message: "Video uploaded successfully",
@@ -92,8 +98,15 @@ router.post("/view/:id", async (req, res) => {
   if (!result) {
     return res.status(404).json({ message: "Video not found" });
   }
+
+  const viewlog = apiDataSource.getRepository(Log).create({
+    activity: "View Video",
+    detail: `User with id: ${id} viewed a video uploaded by userId: ${result.userId}.`,
+  });
+  
   result.viewcount++;
   apiDataSource.getRepository(Video).save(result);
+  await videoRepository.save(viewlog);
   res.sendStatus(200);
 });
 
