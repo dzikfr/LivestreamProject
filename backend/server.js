@@ -10,7 +10,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const { apiDataSource } = require("./config/db");
-const { authenticateToken } = require('./middleware/auth_middleware')
+const  authenticateToken  = require('./middleware/auth_middleware')
 // const { Video } = require("./entities/video");
 // const { User } = require("./entities/user");
 // const Docker = require("dockerode");
@@ -36,7 +36,7 @@ async function intializeAPI() {
     app.use(express.json());
     app.use("/uploads", authenticateToken, express.static("uploads"));
     app.use("/user", userRoute);
-    app.use("/stream", streamRoute);
+    app.use("/stream", authenticateToken,streamRoute);
     app.use("/dvr", videoRoute);
     app.use("/auth", authRoute);
     app.use('/log', logRoute);
