@@ -67,15 +67,17 @@ router.get("/:id", async (req, res) => {
       const result = await apiDataSource.getRepository(User).findOne({
         where: { id: id },
       });
-      res.status(200).json({
+      return res.status(200).json({
         streamUrl: `${ORYX_EMBEDURL}/live/${validation.key.split("?")[0]}.m3u8`,
       });
     }
+
     return res
       .status(404)
-      .json({ message: "User never / havent started streaming!" });
+      .json({ message: "User never / haven't started streaming!" });
   } catch (error) {
     console.error("Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
