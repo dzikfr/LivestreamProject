@@ -5,6 +5,7 @@ const userRoute = require("./routes/userRoute");
 const streamRoute = require("./routes/streamRoute");
 const videoRoute = require("./routes/videoRoute");
 const authRoute = require("./routes/authRoute");
+const logRoute = require('./routes/logRoute')
 const cors = require("cors");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
@@ -37,6 +38,7 @@ async function intializeAPI() {
     app.use("/stream", streamRoute);
     app.use("/dvr", videoRoute);
     app.use("/auth", authRoute);
+    app.use('/log', logRoute);
 
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
