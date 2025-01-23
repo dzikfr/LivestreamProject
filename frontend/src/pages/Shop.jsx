@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import ProductCard from '../components/Card';
+import Card from '../components/Card';
 
 const Shop = () => {
 
@@ -60,7 +60,7 @@ const Shop = () => {
         </div>
       </div>
 
-        <ProductCard product={filteredProducts} />
+        <Card product={filteredProducts} />
 
     </div>
   )
