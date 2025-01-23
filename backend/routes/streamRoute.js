@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../config/db");
 const ORYX_APIURL = "http://localhost:2022/api/v1";
 const ORYX_EMBEDURL = "http://localhost:2022";
 const { apiDataSource } = require("../config/db");

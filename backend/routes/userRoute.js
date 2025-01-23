@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
-const saltRounds = 10;
 const { apiDataSource } = require("../config/db");
 const { User } = require("../entities/user");
 const dotenv = require("dotenv");
