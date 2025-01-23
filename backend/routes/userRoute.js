@@ -8,7 +8,6 @@ const dotenv = require("dotenv");
 const path = require("path");
 const { Log } = require("../entities/log");
 const { Streamkey } = require("../entities/streamkey");
-const { Stream } = require("stream");
 
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
