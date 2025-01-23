@@ -1,7 +1,13 @@
+import ReactPlayer from "react-player" 
+import { useParams } from "react-router-dom"
+
 const View = () => {
+
+  const {id} = useParams()
+
   return (
     <div>
-      view
+      <ReactPlayer url={id} controls/>
     </div>
   )
 }

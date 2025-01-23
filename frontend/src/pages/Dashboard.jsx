@@ -1,6 +1,6 @@
-import Navbar from "../Components/Navbar";
-import VideoPlayer from "../components/VideoPlayer";
-import VideoList from "../Components/VideoList";
+import Navbar from "../components/Navbar";
+import VideoPlayer from "../Components/VideoPlayer";
+import VideoList from "../components/VideoList";
 import { useParams } from "react-router-dom";
 
 const Dashboard = () => {

@@ -27,9 +27,11 @@ const Login = () => {
       );
       console.log(response.data);
       const userId = response.data.data.id;
+      const username = response.data.data.username;
 
       localStorage.setItem("token", response.data.data.token);
       localStorage.setItem("userId", userId);
+      localStorage.setItem("username", username);
 
       navigate(`/user/${userId}`);
       

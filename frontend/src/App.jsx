@@ -6,15 +6,13 @@ import DeleteProduct from "./pages/DeleteProduct";
 import CreateProduct from "./pages/CreateProduct";
 import Home from "./Pages/Home";
 import Navbar from "./components/Navbar";
-import Cart from "./pages/Cart";
-import Success from "./pages/Success";
-import Cancel from "./pages/Cancel";
 import Shop from "./pages/Shop";
 import Footer from "./components/Footer";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import AdminNavbar from "./components/AdminNavbar";
 import User from "./pages/User";
+import Stream from "./pages/Stream";
 import Test from "./pages/Test";
 import View from "./pages/View";
 
@@ -28,20 +26,16 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="view" element={<View />} />
+        <Route path="/view/:id" element={<View />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/success" element={<Success />} />
-        <Route path="/cancel" element={<Cancel />} />
-        <Route path="/user" element={<User />} />
         <Route path="/test" element={<Test/>} />
         <Route
-          path="/admin/*"
+          path="/user/:id"
           element={
             <ProtectedRoute>
-              <AdminRoutes />
+              <UserRoutes/>
             </ProtectedRoute>
           }
         />
@@ -51,13 +45,11 @@ function App() {
   );
 }
 
-const AdminRoutes = () => {
+const UserRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Admin />} />
-      <Route path="/product/create" element={<CreateProduct />} />
-      <Route path="/product/edit/:id" element={<EditProduct />} />
-      <Route path="/product/delete/:id" element={<DeleteProduct />} />
+      <Route path="/" element={<User/>} />
+      <Route path="/stream" element={<Stream/>} />
     </Routes>
   );
 };
