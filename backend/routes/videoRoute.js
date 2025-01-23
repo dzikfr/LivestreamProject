@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../config/db");
 const { apiDataSource } = require("../config/db");
 const { Video } = require("../entities/video");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const { User } = require("../entities/user");
 const { Log } = require("../entities/log");
+const { User } = require("../entities/user");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -55,12 +54,20 @@ router.post("/upload/:id", upload.single("video"), async (req, res) => {
     const baseUrl = `${req.protocol}://${req.get("host")}`;
     const videoUrl = `${baseUrl}/uploads/videos/${req.file.filename}`;
     const videoRepository = apiDataSource.getRepository(Video);
+    const user = await apiDataSource.getRepository(User).findOne({
+      where: { id: id }
+    })
+
+    if(!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     const newVideo = videoRepository.create({
       video_name: req.file.originalname,
       viewcount: 0,
       playbacklink: videoUrl,
       userId: id,
+      username: user.username,
     });
 
     const uploadlog = apiDataSource.getRepository(Log).create({
