@@ -8,7 +8,6 @@ const dotenv = require("dotenv");
 const path = require("path");
 const { Log } = require("../entities/log");
 const { Streamkey } = require("../entities/streamkey");
-const { Stream } = require("stream");
 
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
@@ -122,13 +121,12 @@ router.delete("/:id", async (req, res) => {
       return res.status(404).json({ message: "User not found!" });
     }
 
-    const loginlog = apiDataSource.getRepository(Log).create({
+    const deletelog = apiDataSource.getRepository(Log).create({
       activity: "Delete user",
-      detail: `User with id: ${id} has been deleted by dev.`,
-      username: "dev",
+      detail: `User with id: ${id} has been deleted by system.`,
     });
 
-    await apiDataSource.getRepository(Log).save(loginlog);
+    await apiDataSource.getRepository(Log).save(deletelog);
 
     res.status(200).json({
       message: `User with ID ${numericId} has been deleted successfully.`,
@@ -165,10 +163,9 @@ router.post("/login", async (req, res) => {
     const loginlog = apiDataSource.getRepository(Log).create({
       activity: "User Logged in",
       detail: `user with username: ${username}, has logged in, id: ${result.id}`,
-      username: username,
     });
 
-    await apiDataSource.getRepository(Log).save(registerlog);
+    await apiDataSource.getRepository(Log).save(loginlog);
 
     res.status(200).json({ data: user, message: "Login success" });
   } catch (error) {
@@ -202,7 +199,6 @@ router.post("/register", async (req, res) => {
     const registerlog = apiDataSource.getRepository(Log).create({
       activity: "New User Created",
       detail: `user with username: ${username}, has create an account, id: ${result.id}`,
-      username: username,
     });
 
     await apiDataSource.getRepository(Log).save(registerlog);
@@ -239,6 +235,12 @@ router.get("/key/:id", async (req, res) => {
     });
 
     if (validation) {
+      const requestlog = apiDataSource.getRepository(Log).create({
+        activity: "Request Key",
+        detail: `User with id: ${id} has requested current streamkey.`,
+      });
+
+      await apiDataSource.getRepository(Log).save(requestlog);
       res.json(validation.key);
     }
 
@@ -247,11 +249,23 @@ router.get("/key/:id", async (req, res) => {
     });
 
     if (!result) {
+      const unavaliablelog = apiDataSource.getRepository(Log).create({
+        activity: "Reserve Key",
+        detail: `User with id: ${id} failed to reserve a key due to 0 availbility.`,
+      });
+
+      await apiDataSource.getRepository(Log).save(unavaliablelog);
       return res.status(404).json({ message: "No streamkey available!" });
     }
 
+    const reservelog = apiDataSource.getRepository(Log).create({
+      activity: "Reserve Key",
+      detail: `User with id: ${id} has reserved the streamkey ${result.key}.`,
+    });
+
     result.userId = id;
     await apiDataSource.getRepository(Streamkey).save(result);
+    await apiDataSource.getRepository(Log).save(reservelog);
     res.json(result.key);
   } catch (error) {
     console.error(error);
@@ -270,8 +284,14 @@ router.delete("/key/:id", async (req, res) => {
       return res.status(404).json({ message: "No streamkey reserved!" });
     }
 
+    const reservelog = apiDataSource.getRepository(Log).create({
+      activity: "Unreserve Key",
+      detail: `User with id: ${id} has unreserved the streamkey ${result.key}.`,
+    });
+
     result.userId = null;
     await apiDataSource.getRepository(Streamkey).save(result);
+    await apiDataSource.getRepository(Log).save(reservelog);
     res.status(200).json({ message: "Key unreserved" });
   } catch (error) {
     console.error(error);

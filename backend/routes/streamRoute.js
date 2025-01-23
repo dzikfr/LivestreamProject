@@ -6,6 +6,7 @@ const ORYX_EMBEDURL = "http://localhost:2022";
 const { apiDataSource } = require("../config/db");
 const { User } = require("../entities/user");
 const { Streamkey } = require("../entities/streamkey");
+const { Streamkey } = require("../entities/streamkey");
 
 //Get All Stream from oryx
 router.get("/", async (req, res) => {
@@ -54,31 +55,28 @@ router.get("/", async (req, res) => {
   }
 });
 
-//Get user streamlink
+//Get user livestream link
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-
-    const streamkeyRepo = apiDataSource.getRepository(Streamkey);
-    const streamkey = await streamkeyRepo.findOne({
-      where: { userId : id },
-      relations: ["user"], 
+    const validation = await apiDataSource.getRepository(Streamkey).findOne({
+      where: { userId: id },
     });
 
-    if (!streamkey) {
-      return res.status(404).json({ message: "Streamkey not found" });
+    if (validation) {
+      const result = await apiDataSource.getRepository(User).findOne({
+        where: { id: id },
+      });
+      res.status(200).json({
+        streamUrl: `${ORYX_EMBEDURL}/live/${result.username}/${validation.key.split("?")[0]}.m3u8`,
+      });
     }
-
-    const keyWithoutSecret = streamkey.key.split("?")[0];
-
-    res.json({
-      link: `http://localhost:2022/live/${keyWithoutSecret}.m3u8`,
-    });
+    return res
+      .status(404)
+      .json({ message: "User never / havent started streaming!" });
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 module.exports = router;
