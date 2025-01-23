@@ -12,7 +12,7 @@ const authenticateToken = (req, res, next) => {
         if (!token) {
             return res.status(401).json({
                 success: false,
-                message: 'An error occurred while authenticating.',
+                message: 'No Token Found!',
                 error: error.message
             });
         }
@@ -21,8 +21,7 @@ const authenticateToken = (req, res, next) => {
             if (err) {
                 return res.status(403).json({
                     success: false,
-                    message: 'An error occurred while authenticating.',
-                    error: error.message
+                    message: 'Invalid JWT Token!',
                 });
             }
 
