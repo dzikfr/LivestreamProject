@@ -7,7 +7,7 @@ import Spinner from '../components/Spinner';
 const CreateProduct = () => {
 
 const [name, setName] = useState('');
-const [price, setprice] = useState('');
+const [price, setPrice] = useState('');
 const [category, setCategory] = useState('');
 const [description, setDescription] = useState('');
 const [img, setImg] = useState(null);
