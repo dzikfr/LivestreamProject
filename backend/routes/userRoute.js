@@ -37,21 +37,21 @@ router.get("/:id", async (req, res) => {
 });
 
 //Create a new user
-router.post("/", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const newUser = apiDataSource.getRepository(User).create({
-      username: username,
-      password: password,
-    });
+// router.post("/", async (req, res) => {
+//   try {
+//     const { username, password } = req.body;
+//     const newUser = apiDataSource.getRepository(User).create({
+//       username: username,
+//       password: password,
+//     });
 
-    const result = await apiDataSource.getRepository(User).save(newUser);
-    res.status(200).json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+//     const result = await apiDataSource.getRepository(User).save(newUser);
+//     res.status(200).json(result);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
 //Update user by ID/param
 router.put("/:id", async (req, res) => {
@@ -138,76 +138,76 @@ router.delete("/:id", async (req, res) => {
 });
 
 //login
-router.post("/login", async (req, res) => {
-  try {
-    const { username, password } = req.body;
+// router.post("/login", async (req, res) => {
+//   try {
+//     const { username, password } = req.body;
 
-    const user = await apiDataSource.getRepository(User).findOne({
-      where: {
-        username: username,
-      },
-    });
+//     const user = await apiDataSource.getRepository(User).findOne({
+//       where: {
+//         username: username,
+//       },
+//     });
 
-    if (!user) {
-      return res.status(401).json({ error: "Invalid username or password" });
-    }
+//     if (!user) {
+//       return res.status(401).json({ error: "Invalid username or password" });
+//     }
 
-    // Match password
-    const match = bcrypt.compare(password, user.password);
-    if (!match) {
-      return res.status(401).json({ error: "Invalid username or password" });
-    }
+//     // Match password
+//     const match = bcrypt.compare(password, user.password);
+//     if (!match) {
+//       return res.status(401).json({ error: "Invalid username or password" });
+//     }
 
-    delete user.password;
+//     delete user.password;
 
-    const loginlog = apiDataSource.getRepository(Log).create({
-      activity: "User Logged in",
-      detail: `user with username: ${username}, has logged in, id: ${result.id}`,
-    });
+//     const loginlog = apiDataSource.getRepository(Log).create({
+//       activity: "User Logged in",
+//       detail: `user with username: ${username}, has logged in, id: ${result.id}`,
+//     });
 
-    await apiDataSource.getRepository(Log).save(loginlog);
+//     await apiDataSource.getRepository(Log).save(loginlog);
 
-    res.status(200).json({ data: user, message: "Login success" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+//     res.status(200).json({ data: user, message: "Login success" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
-router.post("/register", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const checkDuplicate = await apiDataSource.getRepository(User).findOne({
-      where: {
-        username: username,
-      },
-    });
+// router.post("/register", async (req, res) => {
+//   try {
+//     const { username, password } = req.body;
+//     const checkDuplicate = await apiDataSource.getRepository(User).findOne({
+//       where: {
+//         username: username,
+//       },
+//     });
 
-    if (checkDuplicate) {
-      return res.status(400).json({ error: "Username already exists" });
-    }
+//     if (checkDuplicate) {
+//       return res.status(400).json({ error: "Username already exists" });
+//     }
 
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+//     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const newUser = apiDataSource.getRepository(User).create({
-      username: username,
-      password: hashedPassword,
-      streamlink: `rtmp://localhost/live/${username}`,
-    });
+//     const newUser = apiDataSource.getRepository(User).create({
+//       username: username,
+//       password: hashedPassword,
+//       streamlink: `rtmp://localhost/live/${username}`,
+//     });
 
-    const result = await apiDataSource.getRepository(User).save(newUser);
-    const registerlog = apiDataSource.getRepository(Log).create({
-      activity: "New User Created",
-      detail: `user with username: ${username}, has create an account, id: ${result.id}`,
-    });
+//     const result = await apiDataSource.getRepository(User).save(newUser);
+//     const registerlog = apiDataSource.getRepository(Log).create({
+//       activity: "New User Created",
+//       detail: `user with username: ${username}, has create an account, id: ${result.id}`,
+//     });
 
-    await apiDataSource.getRepository(Log).save(registerlog);
-    res.status(200).json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+//     await apiDataSource.getRepository(Log).save(registerlog);
+//     res.status(200).json(result);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
 router.get("/username/:username", async (req, res) => {
   try {
