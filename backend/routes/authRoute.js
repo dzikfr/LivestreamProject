@@ -43,7 +43,6 @@ router.post("/login", async (req, res) => {
     const loginlog = apiDataSource.getRepository(Log).create({
       activity: "User Logged in",
       detail: `User with username: ${username}, has logged in, id: ${user.id}, token: ${token}`,
-      username: username,
     });
 
     await apiDataSource.getRepository(Log).save(loginlog);
@@ -85,7 +84,6 @@ router.post("/register", async (req, res) => {
     const registerlog = apiDataSource.getRepository(Log).create({
       activity: "New User Created",
       detail: `User with username: ${username}, has created an account, id: ${result.id}`,
-      username: username,
     });
 
     await apiDataSource.getRepository(Log).save(registerlog);
