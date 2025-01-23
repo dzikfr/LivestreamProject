@@ -235,6 +235,12 @@ router.get("/key/:id", async (req, res) => {
     });
 
     if (validation) {
+      const requestlog = apiDataSource.getRepository(Log).create({
+        activity: "Request Key",
+        detail: `User with id: ${id} has requested current streamkey.`,
+      });
+
+      await apiDataSource.getRepository(Log).save(requestlog);
       res.json(validation.key);
     }
 
@@ -243,11 +249,23 @@ router.get("/key/:id", async (req, res) => {
     });
 
     if (!result) {
+      const unavaliablelog = apiDataSource.getRepository(Log).create({
+        activity: "Reserve Key",
+        detail: `User with id: ${id} failed to reserve a key due to 0 availbility.`,
+      });
+
+      await apiDataSource.getRepository(Log).save(unavaliablelog);
       return res.status(404).json({ message: "No streamkey available!" });
     }
 
+    const reservelog = apiDataSource.getRepository(Log).create({
+      activity: "Reserve Key",
+      detail: `User with id: ${id} has reserved the streamkey ${result.key}.`,
+    });
+
     result.userId = id;
     await apiDataSource.getRepository(Streamkey).save(result);
+    await apiDataSource.getRepository(Log).save(reservelog);
     res.json(result.key);
   } catch (error) {
     console.error(error);
@@ -266,8 +284,14 @@ router.delete("/key/:id", async (req, res) => {
       return res.status(404).json({ message: "No streamkey reserved!" });
     }
 
+    const reservelog = apiDataSource.getRepository(Log).create({
+      activity: "Unreserve Key",
+      detail: `User with id: ${id} has unreserved the streamkey ${result.key}.`,
+    });
+
     result.userId = null;
     await apiDataSource.getRepository(Streamkey).save(result);
+    await apiDataSource.getRepository(Log).save(reservelog);
     res.status(200).json({ message: "Key unreserved" });
   } catch (error) {
     console.error(error);
