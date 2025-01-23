@@ -108,7 +108,7 @@ router.post("/view/:id", async (req, res) => {
 
   const viewlog = apiDataSource.getRepository(Log).create({
     activity: "View Video",
-    detail: `User with id: ${id} viewed a video uploaded by userId: ${result.userId}.`,
+    detail: `User viewed a video uploaded by userId: ${result.userId}.`,
   });
   
   result.viewcount++;
