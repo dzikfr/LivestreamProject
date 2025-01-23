@@ -5,6 +5,79 @@ const ORYX_APIURL = "http://localhost:2022/api/v1";
 const ORYX_EMBEDURL = "http://localhost:2022";
 const { apiDataSource } = require("../config/db");
 const { Video } = require("../entities/video");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = "../uploads/videos";
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // Create unique filename with timestamp
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("video/")) {
+    cb(null, true);
+  } else {
+    cb(new Error("Not a video file! Please upload only videos."), false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50MB
+  },
+});
+
+router.post("/upload/:id", upload.single("video"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No video file uploaded" });
+    }
+
+    const { userId } = req.params;
+
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    const videoRepository = apiDataSource.getRepository(Video);
+
+    const newVideo = videoRepository.create({
+      video_name: req.file.originalname,
+      viewcount: 0,
+      playbacklink: `/uploads/videos/${req.file.filename}`,
+      userId: userId,
+    });
+
+    await videoRepository.save(newVideo);
+
+    res.status(201).json({
+      message: "Video uploaded successfully",
+      video: newVideo,
+    });
+  } catch (error) {
+    // Delete uploaded file if database operation fails
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
+    res.status(500).json({
+      message: "Error uploading video",
+      error: error.message,
+    });
+  }
+});
 
 // Add viewer count
 router.post("/view/:id", async (req, res) => {
