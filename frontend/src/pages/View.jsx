@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ReactPlayer from "react-player";
 import axios from "axios";
+import ReactPlayer from "react-player";
 
 const View = () => {
   const { id } = useParams();
@@ -11,9 +11,9 @@ const View = () => {
     console.log("ID dari URL:", id); // Debug ID
     if (id) {
       axios
-        .get(`http://localhost:3000/stream/${id}`) // Pastikan URL benar
+        .get(`http://localhost:3000/stream/${id}`)
         .then((response) => {
-          console.log("Respons dari API:", response.data); // Debug respons API
+          console.log("Respons dari API:", response.data);
           setLinkVideo(response.data.streamUrl);
         })
         .catch((error) => {
@@ -26,7 +26,7 @@ const View = () => {
     <div>
       {linkVideo ? (
         <ReactPlayer
-          url={"http://localhost:2022/live/7e3f6e9ce16f.m3u8"}
+          url={linkVideo}
           controls
           width="100%"
           height="100%"
