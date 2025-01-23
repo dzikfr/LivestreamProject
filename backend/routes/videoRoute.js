@@ -11,7 +11,7 @@ const fs = require("fs");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const uploadDir = "../uploads/videos";
+    const uploadDir = path.join(__dirname, "../uploads/videos");
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
@@ -46,19 +46,21 @@ router.post("/upload/:id", upload.single("video"), async (req, res) => {
       return res.status(400).json({ message: "No video file uploaded" });
     }
 
-    const { userId } = req.params;
+    const { id } = req.params;
 
-    if (!userId) {
+    if (!id) {
       return res.status(400).json({ message: "User ID is required" });
     }
 
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
+    const videoUrl = `${baseUrl}/uploads/videos/${req.file.filename}`;
     const videoRepository = apiDataSource.getRepository(Video);
 
     const newVideo = videoRepository.create({
       video_name: req.file.originalname,
       viewcount: 0,
-      playbacklink: `/uploads/videos/${req.file.filename}`,
-      userId: userId,
+      playbacklink: videoUrl,
+      userId: id,
     });
 
     await videoRepository.save(newVideo);
