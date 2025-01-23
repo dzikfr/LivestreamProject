@@ -1,7 +1,7 @@
 const { DataSource } = require("typeorm");
 const { User } = require("../entities/user");
 const dotenv = require("dotenv");
-const path = require("path"); // Add this line since you're using path
+const path = require("path"); 
 const { Log } = require("../entities/log");
 const { Streamkey } = require("../entities/streamkey");
 const { Video } = require("../entities/video");

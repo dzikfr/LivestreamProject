@@ -25,6 +25,9 @@ const Video = new EntitySchema({
     userId: {
       type: "int",
     },
+    username: {
+      type: "varchar",
+    },
   },
   relations: {
     user: {
