@@ -234,11 +234,11 @@ router.get("/username/:username", async (req, res) => {
 router.get("/key/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const validation = wait apiDataSource.getRepository(Streamkey).findOne({
+    const validation = await apiDataSource.getRepository(Streamkey).findOne({
       where: { userId: id },
     });
 
-    if(validation){
+    if (validation) {
       res.json(validation.key);
     }
 
