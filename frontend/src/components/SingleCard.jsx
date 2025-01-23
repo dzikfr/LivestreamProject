@@ -47,6 +47,7 @@ const SingleCard = () => {
           </figure>
           <div className="card-body">
             <h2 className="card-title">{video.video_name}</h2>
+            <h2 className="card-title">{video.username}</h2>
             <p>
               <b>Views:</b> {video.viewcount}
             </p>
