@@ -22,7 +22,7 @@ const VideoList = () => {
   }, []);
 
   return (
-    <div>
+    <div className="container">
       {videos.map((video) => (
         <div key={video.streamId}>
           <h2>{video.streamName}</h2>

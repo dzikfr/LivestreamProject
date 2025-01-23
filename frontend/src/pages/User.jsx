@@ -1,30 +1,58 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import SingleCard from "../components/SingleCard";
 
 const Admin = () => {
-  const [product, setProduct] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // const [product, setProduct] = useState([]);
+  // const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setLoading(true);
+  const { id } = useParams();
 
-    axios
-      .get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/video`)
-      .then((response) => {
-        setProduct(response.data.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        setLoading(false);
-      });
-  }, []);
+  // useEffect(() => {
+  //   setLoading(true);
+
+  //   axios
+  //     .get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/video`)
+  //     .then((response) => {
+  //       setProduct(response.data.data);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       setLoading(false);
+  //     });
+  // }, []);
+
+  const createStreamKey = async () => {
+    // Jika id tidak tersedia di URL, coba ambil dari localStorage
+    const streamId = id || localStorage.getItem("streamId");
+
+    if (!streamId) {
+      alert("Stream ID tidak ditemukan!");
+      return;
+    }
+
+    try {
+      // Panggil API untuk memulai stream
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_PORT}/user/key/${streamId}`
+      );
+      console.log("Stream dimulai:", response.data);
+      alert("Stream berhasil dimulai! dengan url: " + response.data.streamUrl);
+
+      //dev only
+      localStorage.setItem("streamKey", response.data);
+    } catch (error) {
+      console.error("Gagal memulai stream:", error);
+      alert("Terjadi kesalahan saat memulai stream.");
+    }
+  };
 
   return (
     <div className="px-4 py-8 max-w-7xl mx-auto">
-
-      <div className="overflow-x-auto">
+      {/* <div className="overflow-x-auto">
         {loading ? (
           <div className="text-center py-10">
             <p className="text-lg font-medium">Loading...</p>
@@ -33,15 +61,16 @@ const Admin = () => {
           <table className="table">
             <thead>
               <tr>
-                <th>
-                  <Link
-                    to="/stream"
-                    className="bg-green-600 hover:bg-green-900 py-2 px-4 font-medium rounded-lg 
-                                shadow-md text-base-100"
-                  >
-                    Start Stream
-                  </Link>
-                </th>
+                <th> */}
+      <button
+        onClick={createStreamKey}
+        className="bg-green-600 hover:bg-green-900 py-2 px-4 font-medium rounded-lg 
+                    shadow-md text-base-100"
+      >
+        Start Stream
+      </button>
+      <SingleCard />
+      {/* </th>
                 <th>Name</th>
                 <th>Price</th>
                 <th>Description</th>
@@ -83,7 +112,7 @@ const Admin = () => {
             </tbody>
           </table>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };
