@@ -26,7 +26,7 @@ const View = () => {
     <div>
       {linkVideo ? (
         <ReactPlayer
-          url={linkVideo}
+          url={"http://localhost:3000/uploads/videos/1737613014849-598059978.mp4"}
           controls
           width="100%"
           height="100%"

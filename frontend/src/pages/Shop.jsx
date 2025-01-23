@@ -6,13 +6,13 @@ const Shop = () => {
 
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [category, setCategory] = useState('');
-  const [product, setProduct] = useState([]);
+  // const [product, setProduct] = useState([]);
 
   useEffect(() => {
     axios
         .get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/product`)
         .then((response) => {
-            setProduct(response.data.data);
+            // setProduct(response.data.data);
             setFilteredProducts(response.data.data);
         })
         .catch((error) => {
@@ -21,24 +21,24 @@ const Shop = () => {
   }, []);
 
 
-  const filterProducts = () => {
-    if (!Array.isArray(product)) {
-      console.error("Products is not an array:", product);
-      return;
-    }
+  // const filterProducts = () => {
+  //   if (!Array.isArray(product)) {
+  //     console.error("Products is not an array:", product);
+  //     return;
+  //   }
 
-    let filtered = [...product];
+  //   let filtered = [...product];
 
-    if (category !== '') {
-      filtered = filtered.filter((product) => product.category === category);
-    }
+  //   if (category !== '') {
+  //     filtered = filtered.filter((product) => product.category === category);
+  //   }
 
-    setFilteredProducts(filtered);
-  };
+  //   setFilteredProducts(filtered);
+  // };
 
-  useEffect(() => {
-    filterProducts();
-  }, []);
+  // useEffect(() => {
+  //   filterProducts();
+  // }, []);
 
 
   return (

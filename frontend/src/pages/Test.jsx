@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import SingleCard from "../components/SingleCard";
 
 const useStore = create((set) => ({
   angka: 0,
@@ -17,6 +18,7 @@ const Test = () => {
       <button onClick={increment} className="btn">
         Increment
       </button>
+      <SingleCard/>
     </div>
   );
 };
