@@ -32,6 +32,7 @@ async function intializeAPI() {
     app.use(cors());
 
     app.use(express.json());
+    app.use("/uploads", express.static("uploads"));
     app.use("/user", userRoute);
     app.use("/stream", streamRoute);
     app.use("/dvr", videoRoute);
