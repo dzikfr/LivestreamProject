@@ -24,7 +24,7 @@ async function intializeAPI() {
     app.use(
       rateLimit({
         windowMs: 60 * 60 * 1000,
-        max: 100,
+        max: 1000,
         message: "You have exceeded the 100 requests in 1 hour limit!",
         standarHeaders: true,
         legacyHeaders: true,

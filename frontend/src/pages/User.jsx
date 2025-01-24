@@ -40,7 +40,7 @@ const Admin = () => {
         `${import.meta.env.VITE_BACKEND_PORT}/user/key/${streamId}`
       );
       console.log("Stream dimulai:", response.data);
-      alert("Stream berhasil dimulai! dengan url: " + response.data.streamUrl);
+      alert("Stream berhasil dimulai! dengan url: " + response.data);
 
       //dev only
       localStorage.setItem("streamKey", response.data);
