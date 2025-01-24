@@ -2,30 +2,20 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ReactPlayer from "react-player";
 
-const token = localStorage.getItem("token");
-
-const config = {
-  headers: {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
-  },
-};
-
-
 const SingleCard = () => {
   const [videos, setVideos] = useState([]);
 
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BACKEND_PORT}/dvr`, config)
+      .get(`${import.meta.env.VITE_BACKEND_PORT}/dvr`)
       .then((response) => {
         setVideos(response.data);
       })
       .catch((error) => {
         console.error("Error fetching videos:", error);
       });
-  }, [config]);
+  }, []);
 
   const viewIncrement = async (videoId) => {
     try {

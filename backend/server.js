@@ -10,11 +10,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const { apiDataSource } = require("./config/db");
-const  authenticateToken  = require('./middleware/auth_middleware')
-// const { Video } = require("./entities/video");
-// const { User } = require("./entities/user");
-// const Docker = require("dockerode");
-// const docker = new Docker();
+const authenticateToken = require('./middleware/auth_middleware')
 
 async function intializeAPI() {
   try {
@@ -36,10 +32,10 @@ async function intializeAPI() {
     app.use(express.json());
     app.use("/uploads", authenticateToken, express.static("uploads"));
     app.use("/user", userRoute);
-    app.use("/stream", authenticateToken,streamRoute);
+    app.use("/stream", streamRoute);
     app.use("/dvr", videoRoute);
     app.use("/auth", authRoute);
-    app.use('/log', logRoute);
+    app.use('/log', authenticateToken, logRoute);
 
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
@@ -51,3 +47,4 @@ async function intializeAPI() {
 }
 
 intializeAPI();
+//monitorDockerLogs();

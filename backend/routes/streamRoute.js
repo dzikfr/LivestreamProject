@@ -63,9 +63,6 @@ router.get("/:id", async (req, res) => {
     });
 
     if (validation) {
-      const result = await apiDataSource.getRepository(User).findOne({
-        where: { id: id },
-      });
       return res.status(200).json({
         streamUrl: `${ORYX_EMBEDURL}/live/${validation.key.split("?")[0]}.m3u8`,
       });
