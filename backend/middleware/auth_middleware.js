@@ -21,14 +21,8 @@ const authenticateToken = (req, res, next) => {
             if (err) {
                 return res.status(403).json({
                     success: false,
-<<<<<<< HEAD
-                    message: 'An error occurred while authenticating.',
-                    error: error.message
-                });;
-=======
                     message: 'Invalid JWT Token!',
                 });
->>>>>>> main
             }
 
             req.user = decoded
