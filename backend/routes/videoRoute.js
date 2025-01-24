@@ -7,6 +7,7 @@ const path = require("path");
 const fs = require("fs");
 const { Log } = require("../entities/log");
 const { User } = require("../entities/user");
+const authenticateToken = require('./middleware/auth_middleware');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -39,7 +40,7 @@ const upload = multer({
   },
 });
 
-router.post("/upload/:id", upload.single("video"), async (req, res) => {
+router.post("/upload/:id", authenticateToken, upload.single("video"), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: "No video file uploaded" });
